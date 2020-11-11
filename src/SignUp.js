@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
+import request from 'superagent';
 
 export default class SignUp extends Component {
     state = { 
         email: '',
-        password: ''
+        password: '',
+        loading: false,
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault()
-    }
+
+        this.setState({ loading: true })
+        const user = await request
+            .post('https://rocky-lowlands-87745.herokuapp.com/auth/signup')
+            .send(this.state);
+            
+            console.log(user.body,' sending you tdos')
+
+    }   
 
     render() {
         return (
