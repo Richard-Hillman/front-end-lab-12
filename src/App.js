@@ -10,14 +10,11 @@ import SignUp from './SignUp.js';
 import Home from './Home.js';
 import Todos from './Todos.js';
 import './App.css';
+import PrivateRoute from './PrivateRoute.js'
+
+// ------------------------------------------------------------------
 
 export default class App extends Component {
-  // state = { token: localStorage.getItem('TOKEN') }
-
-  // handleTokenChange = (myToken) => {
-  //   this.setState({ token: myToken });
-  //   localStorage.setItem('TOKEN', myToken);
-  // }
 
   state= {
     username: localStorage.getItem('USERNAME') || '',
@@ -34,19 +31,58 @@ export default class App extends Component {
     })
   }
 
+  logOut = () => {
+    localStorage.setItem('TOKEN', '');
+    localStorage.setItem('USERNAME', '');
+
+    this.setState({
+      username: '',
+      token: ''
+    })
+  
+  }
+
+
+// -------------------------------------------------------------------------
+
   render() {
     return (
       <div>
         <Router>
           <ul>
-            { this.state.username }
+          {
+            this.state.token 
+    
+// -------------------------------------------------
+
+          ? <div>
+            {this.state.username} 
+              <button onClick={this.logOut}>
+              Log Out
+              </button>
+            </div> 
+    
+          : <>
             <Link to="/login"><div>log in</div></Link>
             <Link to="/signup"><div>sign up</div></Link>
-            <button onClick={() => this.handleTokenChange('')}>logout</button>
+            </>
+          }
+          
           </ul>
+
+{/* ------------------------------------------------ */}
+
           <Switch>
             <Route exact path='/' render={(routerProps) => <Home {...routerProps} />} />
-            <Route exact path='/login' render={(routerProps) => <Login {...routerProps} />} />
+
+{/* ------------------------------------------------ */}
+
+            <Route exact path='/login' render={(routerProps) => <Login {...routerProps} 
+            changerTN={this.changerTN}
+            />} />
+
+{/* ------------------------------------------------ */}
+
             <Route exact path='/signup'
             render={
               (routerProps) =>
@@ -56,7 +92,15 @@ export default class App extends Component {
                 />
             }
             />    
-            <Route exact path='/todos' render={(routerProps) => <Todos {...routerProps} token={this.state.token} />} />      
+
+{/* ------------------------------------------------ */}
+
+            <PrivateRoute
+              token={this.state.token}
+              exact 
+              path='/todos' 
+              render={(routerProps) =>
+              <Todos {...routerProps} token={this.state.token} />} />      
           </Switch>
         </Router>
       </div>

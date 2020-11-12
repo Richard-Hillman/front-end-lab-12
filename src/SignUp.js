@@ -34,6 +34,8 @@ export default class SignUp extends Component {
                     <label> 
                         <input
                         value={this.state.email}
+                        type="email" 
+                        required
                         onChange={(e) => this.setState({ email: e.target.value})}
                         />
                     </label>
