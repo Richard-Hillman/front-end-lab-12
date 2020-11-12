@@ -12,13 +12,18 @@ export default class SignUp extends Component {
     handleSubmit = async (e) => {
         e.preventDefault()
 
-        this.setState({ loading: true })
+        this.setState({ loading:true })
         const user = await request
             .post('https://rocky-lowlands-87745.herokuapp.com/auth/signup')
             .send(this.state);
             
             console.log(user.body,' sending you tdos')
+            this.setState({ loading: false })
 
+       
+            this.props.changerTN(user.body.email,
+            user.body.token);
+            this.props.history.push('/todos')
     }   
 
     render() {
@@ -39,7 +44,12 @@ export default class SignUp extends Component {
                         onChange={(e) => this.setState({ password: e.target.value})}
                         />
                     </label>
-                    <button>Submit</button>
+
+                    {
+                        this.state.loading
+                        ? 'spins'
+                        : <button>Submit</button>
+                    }
                 </form>
             </div>
         )
