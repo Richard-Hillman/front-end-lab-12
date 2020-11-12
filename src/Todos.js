@@ -43,6 +43,28 @@ export default class Todos extends Component {
         }
     }
 
+// ----------------------------------------------------------------------------
+
+    updateTodo = async () => {
+        try{
+            await request
+            .put('https://rocky-lowlands-87745.herokuapp.com/api/todos')
+            .send({
+                completed: this.state.completed
+                })
+            .set('Authorization', this.props.token)
+            this.fetch()
+            
+            return;
+        } catch (err) {
+            this.setState({
+            err: 'fancy error message'
+            })
+        }
+    }
+
+    
+
 // -----------------------------------------------------------------------------
 
     handleSubmit = async (e) => {
@@ -56,6 +78,18 @@ export default class Todos extends Component {
         // this.props.history.push('/todos')
     } 
 
+// ---------------------------------------------------------------------------
+
+handleSubmitUpdate = async (e) => {
+    e.preventDefault(); 
+
+    await this.updateTodo({
+        completed: this.state.completed,
+    });
+
+    // this.props.history.push('/todos')
+} 
+
 // -----------------------------------------------------------------------------
 
     handleTodo = (e) => {
@@ -66,7 +100,17 @@ export default class Todos extends Component {
         this.setState({completed: e.target.value});
     }
 
-    // -------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+handleTodoUpdate = (e) => {
+    this.setState({todo: e.target.value})
+}
+
+handleCompletedUpdate = (e) => {
+    this.setState({completed: e.target.value});
+}
+
+// -------------------------------------------------------------------------
 
     render() {
         return (
@@ -79,6 +123,7 @@ export default class Todos extends Component {
                         todo: {todo.todo}; 
                         completed: {todo.completed.toString()}
                     </div>)
+                    
                 }
             </div>
             
@@ -112,6 +157,9 @@ export default class Todos extends Component {
                 <button>Submit</button>
 
             </form>
+
+
+
             </>
         )
     }
