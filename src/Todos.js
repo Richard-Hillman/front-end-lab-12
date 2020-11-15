@@ -112,7 +112,9 @@ handleCompletedTodo = async (id) => {
                     <div className="todo">
                         todo: {todo.todo}; 
                         completed: {todo.completed.toString()} 
+                        <div>
                         <button onClick={() => this.handleCompletedTodo(todo.id)}>FINISHED</button>
+                        </div>
                     </div>)
                     
                 }
@@ -138,8 +140,8 @@ handleCompletedTodo = async (id) => {
                         </div>
 
                         <select onChange={this.handleCompleted}>
-                            <option value={true}>TRUE</option>
                             <option value={false}>FALSE</option>
+                            <option value={true}>TRUE</option>
                         </select>
                     </div>
 
