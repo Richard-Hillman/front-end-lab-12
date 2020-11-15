@@ -75,20 +75,8 @@ export default class Todos extends Component {
             completed: this.state.completed,
         });
 
-        // this.props.history.push('/todos')
     } 
 
-// ---------------------------------------------------------------------------
-
-handleSubmitUpdate = async (e) => {
-    e.preventDefault(); 
-
-    await this.updateTodo({
-        completed: this.state.completed,
-    });
-
-    // this.props.history.push('/todos')
-} 
 
 // -----------------------------------------------------------------------------
 
@@ -102,12 +90,14 @@ handleSubmitUpdate = async (e) => {
 
 // ---------------------------------------------------------------------------
 
-handleTodoUpdate = (e) => {
-    this.setState({todo: e.target.value})
-}
+handleCompletedTodo = async (id) => {
+    const { token } = this.props;
 
-handleCompletedUpdate = (e) => {
-    this.setState({completed: e.target.value});
+    await request
+        .put(`https://rocky-lowlands-87745.herokuapp.com/api/todos/${id}`)
+        .set('Authorization', this.props.token);
+
+    await this.fetch();
 }
 
 // -------------------------------------------------------------------------
@@ -119,9 +109,12 @@ handleCompletedUpdate = (e) => {
                 Welcome to Todos
                 {
                     !!this.state.todos.length && this.state.todos.map(todo => 
-                    <div>
+                    <div className="todo">
                         todo: {todo.todo}; 
-                        completed: {todo.completed.toString()}
+                        completed: {todo.completed.toString()} 
+                        <div>
+                        <button onClick={() => this.handleCompletedTodo(todo.id)}>FINISHED</button>
+                        </div>
                     </div>)
                     
                 }
@@ -147,8 +140,8 @@ handleCompletedUpdate = (e) => {
                         </div>
 
                         <select onChange={this.handleCompleted}>
-                            <option value={true}>TRUE</option>
                             <option value={false}>FALSE</option>
+                            <option value={true}>TRUE</option>
                         </select>
                     </div>
 
